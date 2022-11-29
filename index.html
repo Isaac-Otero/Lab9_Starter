@@ -69,25 +69,47 @@
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
-      <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
-      <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button onclick="Conlog();"> Console Log</button>
+      <button onclick="ConErr()">Console Error</button>
+      <button onclick="ConCount()">Console Count</button>
+      <button onclick="ConWarn()">Console Warn</button>
+      <button onclick="ConAssert()">Console Assert</button>
+      <button onclick="conClear()">Console Clear</button>
+      <button onclick="ConDir()">Console Dir</button>
+      <button onclick="ConXml()">Console dirxml</button>
+      <button onclick="GroupStart()">Console Group Start</button>
+      <button onclick="GroupEnd()">Console Group End</button>
+      <button onclick="ConTab()">Console Table</button>
+      <button onclick="ConTime()">Start Timer</button>
+      <button onclick="ConEnd()">End Timer</button>
+      <button onclick="ConTrace()">Console Trace</button>
+      <button onclick="Glob()">Trigger a Global Error</button>
     </section>
   </main>
-
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "53b522275f4e497db52c5614e081b45e"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+    TrackJS.track('Testing TrackJS!');
+                        
+  </script>
+                          
+  <script>
+    class CustError extends Error{
+      constructor(msg){
+        super(msg);
+        this.name="CustError";
+      }
+    }
+    function test(){
+      throw new CustError("HEHE XD SORRY! THAT IS WRONG ");
+    }
+    window.onerror= function(message,url,lineNumber){
+        console.log(message,url,lineNumber);
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -101,7 +123,94 @@
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
-    // You may move this JS to another file if you wish
+    // You may move this JS to another file if you wish'
+    let Glob=()=>{
+      window.onerror('oops','http://127.0.0.1:5500/index.html?first-num=2&operator=%2B&second-num=1',119);
+  }
+    let ConCount = () =>{
+      console.count();
+    }
+    let ConWarn = () =>{
+      console.warn('hol up now');
+    }
+    let ConAssert = () =>{
+      let output = document.querySelector('output');
+      const errorMSG = "Bro this number is not an even number!!";
+      let outint=parseInt(output.innerText);
+      
+        console.assert(outint%2===0,'%o', {outint,errorMSG});
+
+    }
+    let conClear= () =>{
+      console.clear();
+    }
+    
+    let Conlog = () =>{ 
+      
+      try{
+        let output = document.querySelector('output');
+        if(output.innerHTML!='4'){
+          throw new SyntaxError('hey why dont you try getting 4'); // (*)
+        }
+        alert(output.innerHTML);
+      }
+      catch(errr){
+        console.error("look at syntax error");
+      }
+    }
+    let ConErr = () =>{
+        console.error('ERROR!!!');
+        try{
+          test();
+        }
+      catch(err){
+      alert(err.name);
+      alert(err.message);
+    }
+        
+        
+    }
+    let ConTab = () =>{
+      let output = document.querySelector('output');
+      let firstNum = document.querySelector('#first-num').value;
+      let secondNum = document.querySelector('#second-num').value;
+        console.table([ firstNum, secondNum,output.innerHTML])
+    }
+    let ConDir = () =>{
+      let output = document.querySelector('output');
+      console.dir(output.innerHTML);
+    }
+    let ConXml = () =>{
+      let output = document.querySelector('output');
+    console.dirxml(output.innerHTML);
+    }
+    let GroupStart = () =>{
+      console.group();
+    }
+    let GroupEnd = () =>{
+      console.groupEnd();
+    }
+    let ConTime = () =>{  
+      console.time();
+    }
+    let ConEnd = () =>{
+      console.timeEnd();
+    }
+    let ConTrace = () =>{
+      console.trace();
+    }
+    try {
+      alert('Welcome to the page!');
+      wehopeyouenjoyyourstay;
+      
+    }
+    catch (err){
+      console.error("hey bozo check your code!");
+      console.error(err.message);
+    }
+    finally{
+      alert("please use the calcluator in any way!");
+    }
   </script>
 </body>
 
